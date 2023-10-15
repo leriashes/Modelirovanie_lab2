@@ -38,30 +38,19 @@ def findBad(cells_values):
     return bad_values
 
 
-def countTStart(n, step, start_values):
-    sum_a = 0
-    sum_b = 0
-    sum_c = 0
-    sum_x = 0
-    sum_y = 0
+def countTStart(n, start_values):
+    sum_t = [0, 0, 0, 0, 0, 0, 0]
+    sum_dt = [0, 0, 0, 0, 0, 0]
     T = 0
-    three = False
 
-    mas_x = []
-    mas_y = []
+    dt_str = []
+    dt = []
 
-    xs = []
-    ys = []
-
-    if (step > 3):
-        step = 1
-
-    if (step == 3 or step == 5):
-        three = True
-        
-
-    for i in range(0, n, step):
-        sum_a += start_values[i // step][1]
+    '''for i in range(0, n, 7):
+        dt.append([])
+        for j in range(7):
+            sum_t[j] += start_values[i // 7][j + 1]
+            dt[i].append(max(sum_a - sum_x - sum_b, 0))
         xs.append(max(sum_a - sum_x - sum_b, 0))
         sum_x += xs[i // step]
         sum_b += start_values[i // step][2]
@@ -81,7 +70,7 @@ def countTStart(n, step, start_values):
     else:
         T = sum_x + sum_b
 
-    return (T, mas_x, mas_y)
+    return (T, mas_dt)'''
 
 
 def countT(n, values, type):
@@ -144,6 +133,79 @@ def JohnsonAlgorithm(start_values):
     result_values = mas_a + mas_b
 
     return result_values
+
+def TableMethod(values, t_str, T_str, dt_str, Tpr_str, Tozh_str):
+    t = []
+    T = []
+    dt = []
+
+    Tpr = []
+    Tozh = []
+
+    for i in range(7):
+        t.append([])
+        T.append([])
+        dt.append([])
+        for j in range(7):
+            t[i].append(values[i][j + 1])
+
+            T_up = 0
+            T_left = 0
+
+            for k in range(i - 1, -1, -1):
+                if (T[k][j] != 0):
+                    T_up = T[k][j]
+                    break
+
+            for k in range(j - 1, -1, -1):
+                if (T[i][k] != 0):
+                    T_left = T[i][k]
+                    break
+
+            if (t[i][j] == 0):
+                T[i].append(0)
+                dt[i].append(0)
+            else:
+                T[i].append(t[i][j] + max(T_up, T_left))
+                dt[i].append(max(T_up, T_left) - T_up)
+
+            t_str.append(str(t[i][j]))
+            T_str.append(str(T[i][j]))
+            dt_str.append(str(dt[i][j]))
+
+    s1 = 0
+    s2 = 0
+
+    for i in range(7):
+
+        T_up = 0
+        T_left = 0
+
+        for k in range(6, -1, -1):
+            if (T[k][i] != 0):
+                T_up = T[k][i]
+                break
+
+        for k in range(6, -1, -1):
+            if (T[i][k] != 0):
+                T_left = T[i][k]
+                break
+
+        Tpr.append(T_up)
+        Tozh.append(T_left)
+        for j in range(7):
+            Tpr[i] -= t[j][i]
+            Tozh[i] -= t[i][j]
+
+        s1 += Tpr[i]
+        s2 += Tozh[i]
+
+        Tpr_str.append(str(Tpr[i]))
+        Tozh_str.append(str(Tozh[i]))
+
+    Tpr_str.append(str(s1))
+    Tozh_str.append(str(s2))
+
 
 def SortAsc(params, seq, param_number):
 
@@ -326,224 +388,110 @@ def Rule4(params, D1, D0, D2):
 
     return seq
 
-
 @app.route('/')
 @app.route('/index')
 def index():
     if request.is_json:
         cells_values = toStrArray(request.args.get('cells_values'))
         bad_values = findBad(cells_values)
-
-        mas_x = []
         start_values = []
 
         if (len(bad_values) == 0):
             for i in range(0, len(cells_values), 7):
-                v = [i]
+                v = [i // 7]
                 for j in range(7):
                     v.append(int(cells_values[i + j]))
 
                 start_values.append(v)
 
-            if (request.args.get('action') == 'countPS'):
 
-                P1 = []
-                P2 = []
-                lamb = []
 
-                params = []
+            P1 = []
+            P2 = []
+            lamb = []
 
-                for i in range(7):
-                    sum1 = 0
-                    sum2 = 0
+            params = []
 
-                    for j in range(4):
-                        sum1 += start_values[i][j + 1]
-                        sum2 += start_values[i][j + 4]
+            for i in range(7):
+                sum1 = 0
+                sum2 = 0
 
-                    P1.append(str(sum1))
-                    P2.append(str(sum2))
-                    lamb.append(str(sum2 - sum1))
+                for j in range(4):
+                    sum1 += start_values[i][j + 1]
+                    sum2 += start_values[i][j + 4]
 
-                    params.append([i, sum1, sum2, sum2 - sum1])
+                P1.append(str(sum1))
+                P2.append(str(sum2))
+                lamb.append(str(sum2 - sum1))
 
-                D1 = []
-                D0 = []
-                D10 = []
-                D2 = []
+                params.append([i, sum1, sum2, sum2 - sum1])
 
-                for i in range(7):
-                    if params[i][3] >= 0:
-                        if params[i][3] > 0:
-                            D1.append(params[i][0])
-                        else:
-                            D0.append(params[i][0])
-                        D10.append(params[i][0])
+            D1 = []
+            D0 = []
+            D10 = []
+            D2 = []
+
+            for i in range(7):
+                if params[i][3] >= 0:
+                    if params[i][3] > 0:
+                        D1.append(params[i][0])
                     else:
-                        D2.append(params[i][0])
+                        D0.append(params[i][0])
+                    D10.append(params[i][0])
+                else:
+                    D2.append(params[i][0])
 
-                sequences = [Rule1(params, D10, D2), Rule2(params), Rule3(params, D1, D0, D2), Rule4(params, D1, D0, D2)]
+            sequences = [Rule1(params, D10, D2), Rule2(params), Rule3(params, D1, D0, D2), Rule4(params, D1, D0, D2)]
 
-                seq_str = []
+            seq_str = []
 
-                for i in range(7):
-                    for j in range(4):
-                        seq_str.append(str(sequences[j][i] + 1))
+            for i in range(7):
+                for j in range(4):
+                    seq_str.append(str(sequences[j][i] + 1))
+
+            if (request.args.get('action') == 'countPS'):
 
                 return jsonify({'P1s': (' ').join(P1), 'P2s': (' ').join(P2), 'lambdas': (' ').join(lamb), 'seq_str': (' ').join(seq_str)})
 
-                #T, mas_x, y = countTStart(len(cells_values), 2, start_values)
-
-                #return jsonify({'T': T, 'mas_x': (' ').join(mas_x)})
-
-            #Прорисовка графика по исходным значениям - вычисление x
+            #Прорисовка графика по исходным значениям
             elif (request.args.get('action') == 'draw'):
 
-                T, mas_x, y = countTStart(len(cells_values), 2, start_values)
+                t = []
+                T = []
+                dt = []
 
-                return jsonify({'T': T, 'mas_x': (' ').join(mas_x)})
-
-            #Поиск решения
-            elif (request.args.get('action') == 'find'):
-                
-                result_values = JohnsonAlgorithm(start_values)
-                res_str = []
-
-                for i in range(len(result_values)):
-                    for j in range(3):
-                        res_str.append(str(result_values[i][j] + 1 * (j == 0)))
-
-                T, mas_x, y = countT(len(result_values), result_values, 2)
-
-                return jsonify({'T': T, 'mas_x': (' ').join(mas_x), 'res': (' ').join(res_str)})
-        return jsonify({'bad': (' ').join(bad_values)})
-    else:
-        return render_template("index.html", title = "Задача для 2 станков", type = 2)
-
-
-    if request.is_json:
-        cells_values = toStrArray(request.args.get('cells_values'))
-        bad_values = findBad(cells_values)
-
-        mas_x = []
-        mas_y = []
-        start_values = []
-
-        if (len(bad_values) == 0):
-
-            for i in range(0, len(cells_values), 3):
-                start_values.append([i // 3, int(cells_values[i]), int(cells_values[i + 1]), int(cells_values[i + 2])])
-
-            #Прорисовка графика по исходным значениям - вычисление x, y
-            if (request.args.get('action') == 'draw'):
-                T, mas_x, mas_y = countTStart(len(cells_values), 3, start_values)
-
-                return jsonify({'bad': (' ').join(bad_values), 'T': T, 'mas_x': (' ').join(mas_x), 'mas_y': (' ').join(mas_y)})
+                TableMethod(start_values, t, T, dt, [], [])
+                return jsonify({'t_str': (' ').join(t), 'T_str': (' ').join(T), 'dt_str': (' ').join(dt)})
 
             #Поиск решения
             elif (request.args.get('action') == 'find'):
-                # метод перебора
-                pT, pmas_x, pmas_y = countTStart(len(cells_values), 3, start_values)
-                ps = [0, 1, 2, 3, 4]
-                prs = [0, 1, 2, 3, 4]
-                n = len(ps)
-                j = 1
+                t_res = []
+                T_res = []
+                dt_res = []
+                Tpr_res = []
+                Tozh_res = []
 
-                start_time = datetime.now()
+                values = []
 
-                while True:
-                    i = 3
-                    while i != -1 and ps[i] >= ps[i + 1]:
-                        i -= 1
-                    if i == -1:
-                        break
-                    
-                    k = n - 1
-                    while ps[i] >= ps[k]:
-                        k -= 1
+                print(start_values)
 
-                    ps[i], ps[k] = ps[k], ps[i]
+                i = 0
 
-                    l = i + 1
-                    r = n - 1
+                for seq in sequences:
+                    print('seq ', seq)
+                    values.append([])
+                    for elem in seq:
+                        print('elem', elem)
+                        values[i].append(start_values[elem].copy())
+                    i += 1
 
-                    while l < r:
-                        ps[l], ps[r] = ps[r], ps[l]
-                        l += 1
-                        r -= 1
+                print(values)
 
-                    tT, tmas_x, tmas_y = countTseq(start_values, ps)
+                for i in range(4):
+                    TableMethod(values[i], t_res, T_res, dt_res, Tpr_res, Tozh_res)
+                return jsonify({'seq_str': (' ').join(seq_str), 't_str': (' ').join(t_res), 'T_str': (' ').join(T_res), 'dt_str': (' ').join(dt_res), 'Tpr_str': (' ').join(Tpr_res), 'Tozh_str': (' ').join(Tozh_res)})
 
-                    print("yay", tT, pT, tT < pT)
-                    if (tT < pT):
-                        prs = ps.copy()
-                        pT = tT
-                        pmas_x = tmas_x
-                        pmas_y = tmas_y
-                        print("yay")
-                    j += 1
-
-                    print(j, prs, ps, tT, pT)
-
-                ptime = datetime.now() - start_time
-                print(ptime)
-
-                print(prs, ps)
-                pres_str = []
-
-                for i in range(len(prs)):
-                    pres_str.append(str(prs[i] + 1))
-                    for j in range(3):
-                        pres_str.append(str(start_values[prs[i]][j + 1]))
-
-                #проверка условия Джонсона
-                min_a = start_values[0][1]
-                max_b = start_values[0][2]
-                min_c = start_values[0][3]
-
-                for i in range(1, len(start_values)):
-                    if (start_values[i][1] < min_a):
-                        min_a = start_values[i][1]
-                    if (start_values[i][2] > max_b):
-                        max_b = start_values[i][2]
-                    if (start_values[i][3] < min_c):
-                        min_c = start_values[i][3]
-
-                cond = (min_a >= max_b) or (min_c >= max_b)
-
-                if (cond):
-
-                    start_time = datetime.now()
-
-                    de_values = []
-
-                    for i in range(len(start_values)):
-                        de_values.append([start_values[i][0], start_values[i][1] + start_values[i][2], start_values[i][2] + start_values[i][3]])
-
-                    result_values = JohnsonAlgorithm(de_values)
-
-                    seq = []
-                    for i in range(len(result_values)):
-                        seq.append(result_values[i][0])
-
-                    T, mas_x, mas_y = countTseq(start_values, seq)
-
-                    jtime = datetime.now() - start_time
-
-                    print(jtime)
-
-
-
-                    res_str = []
-
-                    for i in range(len(result_values)):
-                        res_str.append(str(result_values[i][0] + 1))
-                        for j in range(3):
-                            res_str.append(str(start_values[result_values[i][0]][j + 1]))
-
-                    return jsonify({'jtime': str(jtime), 'ptime': str(ptime), 'pT': pT, 'pmas_x': (' ').join(pmas_x), 'pmas_y': (' ').join(pmas_y), 'pres': (' ').join(pres_str), 'T': T, 'mas_x': (' ').join(mas_x), 'mas_y': (' ').join(mas_y), 'res': (' ').join(res_str), 'cond': cond})
-                return jsonify({'pT': pT, 'pmas_x': (' ').join(pmas_x), 'pmas_y': (' ').join(pmas_y), 'pres': (' ').join(pres_str), 'cond': cond})
                 
         return jsonify({'bad': (' ').join(bad_values)})
     else:
-        return render_template("index.html", title = "Задача для 3 станков", type = 3)
+        return render_template("index.html", type = 2)

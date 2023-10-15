@@ -51,67 +51,45 @@ function bad_values(bad)
 }
 
 //Прорисовка графика
-function draw_graph(s, xs, ys, T, values, table_number)
+function draw_graph(s, values, dt, Tres, table_number)
 {
     var data = [];
-    var colors = ['rgba(237, 178, 81, 0.6)', 'rgba(187, 247, 116, 0.6)', 'rgba(103, 224, 224, 0.6)', 'rgba(152, 101, 247, 0.6)', 'rgba(239, 141, 131, 0.6)', 'rgba(23, 53, 110, 0.4)', 'rgba(13, 43, 100, 0.4)'];
-    var numbers = '₁₂₃₄₅';
+    var colors = ['rgba(206, 42, 91, 0.6)', 'rgba(239, 141, 131, 0.6)', 'rgba(237, 178, 81, 0.6)', 'rgba(187, 247, 116, 0.6)', 'rgba(103, 224, 224, 0.6)', 'rgba(152, 101, 247, 0.6)', 'rgba(66, 41, 131, 0.6)', 'rgba(23, 53, 110, 0.3)'];
 
     len = values.length;
-    step = 2;
 
-    if (ys != null)
+    for (i = 0; i < len; i += 7)
     {
-        step = 3;
-    }
+        xz = []
+        yz = ['Станок 7  ', 'Станок 6  ', 'Станок 5  ', 'Станок 4  ', 'Станок 3  ', 'Станок 2  ', 'Станок 1  '];
 
-    for (i = 0; i < len; i += step)
-    {
-        xz = [parseInt(values[i + 1]), parseInt(values[i])];
-        yz = ['B', 'A'];
+        for (j = 0; j < 7; j++)
+        {
+            xz.push(values[i + 6 - j])
+        }
 
-        if (step == 3)
+        for (j = 1; j < 7; j++)
         {
             data.push({
-                x: [parseInt(ys[i / step])],
-                y: ['C'],
-                name: 'y' + numbers[i / step],
+                x: [parseInt(dt[i + 7 - j])],
+                y: [yz[j - 1]],
+                name: 'Простой',
                 orientation: 'h',
                 width: 0.5,
                 marker: {
-                    color: colors[6],
+                    color: colors[7],
                     width: 1
                 },
                 type: 'bar',
                 showlegend: false,
             });
-
-            xz = [parseInt(values[i + 2])].concat(xz)
-            yz = ['C'].concat(yz)
         }
 
-
-        data.push({
-            x: [parseInt(xs[i / step])],
-            y: ['B'],
-            name: 'x' + numbers[i / step],
-            orientation: 'h',
-            width: 0.5,
-            marker: {
-                color: colors[5],
-                width: 1
-            },
-            type: 'bar',
-            showlegend: false,
-        });
-
-        name_str = (i / (step) + 1).toString();
-
-        
+        name_str = (i / 7 + 1).toString();
 
         if (table_number >= 2)
         {
-            name_str += '(' + s[i / (step)].toString() + ')';
+            name_str += '(' + s[i / 7].toString() + ')';
         }
 
         data.push({
@@ -121,7 +99,7 @@ function draw_graph(s, xs, ys, T, values, table_number)
             orientation: 'h',
             width: 0.5,
             marker: {
-                color: colors[s[i / step] - 1],
+                color: colors[s[i / 7] - 1],
                 width: 1
             },
             type: 'bar'
@@ -133,7 +111,7 @@ function draw_graph(s, xs, ys, T, values, table_number)
     data.push({
         x: [0],
         y: ['B'],
-        name: 'xᵢ',
+        name: 'Простои станков',
         orientation: 'h',
         width: 0.5,
         marker: {
@@ -144,27 +122,9 @@ function draw_graph(s, xs, ys, T, values, table_number)
         visible: 'legendonly'
     }); 
 
-    
-    if (step == 3)
-    {
-        data.push({
-            x: [0],
-            y: ['C'],
-            name: 'yᵢ',
-            orientation: 'h',
-            width: 0.5,
-            marker: {
-                color: 'rgba(13, 43, 100, 0.8)',
-                width: 1
-            },
-            type: 'bar',
-            visible: 'legendonly'
-        });
-    }
-
        
 
-    t = parseInt(T / 45) + 1
+    t = parseInt(Tres / 45) + 1
     
     var layout = {
     title: 'График Ганта',
@@ -200,10 +160,10 @@ function findSeq()
 
             if (!bad_values(response.bad))
             {
-                P1 = response.P1s.split(' ')
-                P2 = response.P2s.split(' ')
-                Lambda = response.lambdas.split(' ')
-                Seq = response.seq_str.split(' ')
+                P1 = response.P1s.split(' ');
+                P2 = response.P2s.split(' ');
+                Lambda = response.lambdas.split(' ');
+                Seq = response.seq_str.split(' ');
 
                 let p1 = document.querySelectorAll('.P1');
                 let p2 = document.querySelectorAll('.P2');
@@ -221,13 +181,6 @@ function findSeq()
                 {
                     seq[i].innerHTML = Seq[i];
                 }
-
-                /*let p1 = document.querySelectorAll('.P1');
-
-                for (i = 0; i < p1.length; i++)
-                {
-                    p1[i].innerHTML = 5;
-                }*/
             }
         }
     });
@@ -245,8 +198,211 @@ $(document).ready(function(){
 
     $('#drawGraph').click(function(e)
     {
-        ;
+        e.preventDefault();
+
+        table_values = get_values();
+
+        let cells = document.querySelectorAll('.form-control')
+
+        $.ajax({
+            url: '',
+            type: 'get',
+            contentType: 'application/json',
+            data: {
+                action: 'draw',
+                cells_values: JSON.stringify(table_values),
+            },
+
+            success: function(response){
+
+                if (!bad_values(response.bad))
+                {
+                    values = [];
+                    
+                    for(i = 0; i < cells.length; i++)
+                    {
+                        values.push(cells[i].value);
+                    }
+
+                    draw_graph([1, 2, 3, 4, 5, 6, 7], values, response.dt_str.split(' '), (response.T_str.split(' '))[48], 1);
+
+                    let a = document.querySelector('#cardChart1');
+                    a.style.display = 'block';
+                }
+
+            }
+            
+        })
     });
+
+    //Поиск решения, график по оптимальному решению
+    $('#findDecision').click(function(e)
+    {
+        findSeq();
+
+        e.preventDefault();
+        
+        table_values = get_values();
+        
+        $.ajax({
+            url: '',
+            type: 'get',
+            contentType: 'application/json',
+            data: {
+                action: 'find',
+                cells_values: JSON.stringify(table_values)
+            },
+            success: function(response){
+                
+                if (!bad_values(response.bad))
+                {
+                    Seq = response.seq_str.split(' ');
+                    let seq = document.querySelectorAll('.new_seq');
+
+                    for (i = 0, j = 0; i < seq.length; i++, j += 4)
+                    {
+                        seq[i].innerHTML = Seq[(i - i % 7) / 7 + j];
+
+                        if (j == 24)
+                        {
+                            j = -4;
+                        }
+                    }
+
+                    Val_t = response.t_str.split(' ');
+                    Val_T = response.T_str.split(' ');
+                    let val_tT = document.querySelectorAll('.tT');
+
+                    for (i = 0; i < val_tT.length; i++)
+                    {
+                        if (Val_t[i] == "0")
+                            val_tT[i].innerHTML = Val_t[i] + '/';
+                        else
+                            val_tT[i].innerHTML = Val_t[i] + '/' + Val_T[i];
+                    }
+
+                    Val_Tpr = response.Tpr_str.split(' ');
+                    Val_Tozh = response.Tozh_str.split(' ');
+                    let val_Ti = document.querySelectorAll('.Ti');
+                    let val_Tj = document.querySelectorAll('.Tj');
+                    let val_Tij = document.querySelectorAll('.Tij');
+
+                    for (i = 0, j = 0, k = 0; k < 32; k++)
+                    {
+                        if (k % 8 == 7)
+                        {
+                            val_Tij[j].innerHTML = Val_Tpr[k] + '\\' + Val_Tozh[k];
+                            j++;
+                        }
+                        else
+                        {
+                            val_Tj[i].innerHTML = Val_Tpr[k];
+                            val_Ti[i].innerHTML = Val_Tozh[k];
+                            i++;
+                        }
+                    }
+
+                    let cells = document.querySelectorAll('.form-control')
+                    values = [];
+                    
+                    for(i = 0; i < cells.length; i++)
+                    {
+                        values.push(cells[i].value);
+                    }
+
+                    draw_graph([7, 4, 1, 3, 2, 5, 6], values, response.dt_str.split(' '), (response.T_str.split(' '))[48], 2);
+
+                    /*if (response.cond == null || response.cond == true)
+                    {
+                        let cells = document.querySelectorAll('.res-cell1');
+                        var res = response.res.split(' ');
+                        let s = [];
+
+                        let n = res.length / 5;
+                        values = []
+
+                        for(i = 0; i < cells.length; i++)
+                        {
+                            if (i % n == 0)
+                            {
+                                s.push(parseInt(res[i]));
+                            }
+                            else
+                            {
+                                values.push(res[i])
+                            }
+
+                            cells[i].innerHTML = res[i];
+                        }
+
+
+                        if (response.mas_y == null)
+                        {
+                            draw_graph(s, response.mas_x.split(' '), null, response.T, values, 2);
+                        }
+                        else
+                        {
+                            let b = document.querySelector('#Johnson');
+                            b.style.display = 'block';
+
+                            draw_graph(s, response.mas_x.split(' '), response.mas_y.split(' '), response.T, values, 2);
+
+                            if (response.jtime != null)
+                            {
+                                let j = document.querySelector('#jtime');
+                                let p = document.querySelector('#ptime');
+                                p.style.display = 'block';
+
+                                j.innerHTML = "Время выполнения\n" + response.jtime;
+                                p.innerHTML = "Время выполнения\n" + response.ptime;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        let b = document.querySelector('#Johnson');
+                        b.style.display = 'none';
+
+                        let p = document.querySelector('#ptime');
+                        p.style.display = 'none';
+                    }
+
+                    if (response.cond != null)
+                    {
+                        let cells = document.querySelectorAll('.res-cell2');
+                        var res = response.pres.split(' ');
+                        let s = [];
+
+                        let n = res.length / 5;
+                        values = []
+
+                        for(i = 0; i < cells.length; i++)
+                        {
+                            if (i % n == 0)
+                            {
+                                s.push(parseInt(res[i]));
+                            }
+                            else
+                            {
+                                values.push(res[i])
+                            }
+
+                            cells[i].innerHTML = res[i];
+                        }
+
+                        draw_graph(s, response.pmas_x.split(' '), response.pmas_y.split(' '), response.pT, values, 3);
+                    }
+*/
+                    let a = document.querySelector('#cardChart2');
+                    a.style.display = 'block';
+                }
+            }
+        })
+    });
+
+
+
+
 
     //График по исходным данным
     /*$('#drawGraph').click(function(e)
