@@ -1,0 +1,439 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container text-center">
+        <div style="margin-bottom: 4%;"">
+            <h2 class="text-center" style="margin-top: 4%;" >
+                Исходный порядок
+            </h2>
+            <div class="row">
+              <div class="col-12">
+                <div class="row p-4">
+                    <table class="table table-bordered" >
+                        <thead>
+                          <tr>
+                            <th scope="col" rowspan="2">d<sub>i</sub>\j</th>
+                            <th scope="col" colspan="7">Станки</th>
+                            <th scope="col" colspan="3">Параметры</th>
+                            <th scope="col" colspan="4">Варианты последовательностей</th>
+                          </tr>
+                          <tr>
+                            <th scope="col">1</th>
+                            <th scope="col">2</th>
+                            <th scope="col">3</th>
+                            <th scope="col">4</th>
+                            <th scope="col">5</th>
+                            <th scope="col">6</th>
+                            <th scope="col">7</th>
+
+                            <th scope="col">P<sub>i1</sub></th>
+                            <th scope="col">P<sub>i2</sub></th>
+                            <th scope="col">λ<sub>i</sub></th>
+                            <th scope="col">1</th>
+                            <th scope="col">2</th>
+                            <th scope="col">3</th>
+                            <th scope="col">4</th>
+                          </tr>
+                          
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td><input type="text" class="form-control" value="6"></td>
+                            <td><input type="text" class="form-control" value="1"></td>
+                            <td><input type="text" class="form-control" value="16"></td>
+                            <td><input type="text" class="form-control" value="2"></td>
+                            <td><input type="text" class="form-control" value="7"></td>
+                            <td><input type="text" class="form-control" value="5"></td>
+                            <td><input type="text" class="form-control" value="11"></td>
+                            <!--<td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="11"></td>
+                            <td><input type="text" class="form-control" value="8"></td>
+                            <td><input type="text" class="form-control" value="6"></td>
+                            <td><input type="text" class="form-control" value="2"></td>
+                            <td><input type="text" class="form-control" value="4"></td>
+                            <td><input type="text" class="form-control" value="6"></td>-->
+
+                            <td class="P1"></td>
+                            <td class="P2"></td>
+                            <td class="lambda"></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="11"></td>
+                            <td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="16"></td>
+                            <td><input type="text" class="form-control" value="4"></td>
+                            <td><input type="text" class="form-control" value="2"></td>
+                            <td><input type="text" class="form-control" value="6"></td>
+                            <!--<td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="8"></td>
+                            <td><input type="text" class="form-control" value="5"></td>
+                            <td><input type="text" class="form-control" value="1"></td>
+                            <td><input type="text" class="form-control" value="6"></td>
+                            <td><input type="text" class="form-control" value="8"></td>
+                            <td><input type="text" class="form-control" value="2"></td>-->
+
+                            <td class="P1"></td>
+                            <td class="P2"></td>
+                            <td class="lambda"></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td><input type="text" class="form-control" value="12"></td>
+                            <td><input type="text" class="form-control" value="12"></td>
+                            <td><input type="text" class="form-control" value="14"></td>
+                            <td><input type="text" class="form-control" value="0"></td>
+                            <td><input type="text" class="form-control" value="14"></td>
+                            <td><input type="text" class="form-control" value="15"></td>
+                            <td><input type="text" class="form-control" value="9"></td>
+                            <!--<td><input type="text" class="form-control" value="15"></td>
+                            <td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="12"></td>
+                            <td><input type="text" class="form-control" value="10"></td>
+                            <td><input type="text" class="form-control" value="9"></td>
+                            <td><input type="text" class="form-control" value="2"></td>
+                            <td><input type="text" class="form-control" value="1"></td>-->
+
+                            <td class="P1"></td>
+                            <td class="P2"></td>
+                            <td class="lambda"></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">4</th>
+                            <td><input type="text" class="form-control" value="5"></td>
+                            <td><input type="text" class="form-control" value="10"></td>
+                            <td><input type="text" class="form-control" value="9"></td>
+                            <td><input type="text" class="form-control" value="13"></td>
+                            <td><input type="text" class="form-control" value="7"></td>
+                            <td><input type="text" class="form-control" value="10"></td>
+                            <td><input type="text" class="form-control" value="12"></td>
+                            <!--<td><input type="text" class="form-control" value="8"></td>
+                            <td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="9"></td>
+                            <td><input type="text" class="form-control" value="6"></td>
+                            <td><input type="text" class="form-control" value="0"></td>
+                            <td><input type="text" class="form-control" value="9"></td>
+                            <td><input type="text" class="form-control" value="11"></td>-->
+
+                            <td class="P1"></td>
+                            <td class="P2"></td>
+                            <td class="lambda"></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">5</th>
+                            <td><input type="text" class="form-control" value="9"></td>
+                            <td><input type="text" class="form-control" value="8"></td>
+                            <td><input type="text" class="form-control" value="17"></td>
+                            <td><input type="text" class="form-control" value="14"></td>
+                            <td><input type="text" class="form-control" value="15"></td>
+                            <td><input type="text" class="form-control" value="9"></td>
+                            <td><input type="text" class="form-control" value="1"></td>
+                            <!--<td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="11"></td>
+                            <td><input type="text" class="form-control" value="8"></td>
+                            <td><input type="text" class="form-control" value="6"></td>
+                            <td><input type="text" class="form-control" value="2"></td>
+                            <td><input type="text" class="form-control" value="4"></td>
+                            <td><input type="text" class="form-control" value="6"></td>-->
+
+                            <td class="P1"></td>
+                            <td class="P2"></td>
+                            <td class="lambda"></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">6</th>
+                            <td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="10"></td>
+                            <td><input type="text" class="form-control" value="10"></td>
+                            <td><input type="text" class="form-control" value="15"></td>
+                            <td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="2"></td>
+                            <td><input type="text" class="form-control" value="4"></td>
+                            <!--<td><input type="text" class="form-control" value="3"></td>
+                            <td><input type="text" class="form-control" value="11"></td>
+                            <td><input type="text" class="form-control" value="8"></td>
+                            <td><input type="text" class="form-control" value="6"></td>
+                            <td><input type="text" class="form-control" value="2"></td>
+                            <td><input type="text" class="form-control" value="4"></td>
+                            <td><input type="text" class="form-control" value="6"></td>-->
+
+                            <td class="P1"></td>
+                            <td class="P2"></td>
+                            <td class="lambda"></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">7</th>
+                            <td><input type="text" class="form-control" value="0"></td>
+                            <td><input type="text" class="form-control" value="10"></td>
+                            <td><input type="text" class="form-control" value="4"></td>
+                            <td><input type="text" class="form-control" value="8"></td>
+                            <td><input type="text" class="form-control" value="1"></td>
+                            <td><input type="text" class="form-control" value="4"></td>
+                            <td><input type="text" class="form-control" value="15"></td>
+                            <!--<td><input type="text" class="form-control" value="7"></td>
+                            <td><input type="text" class="form-control" value="11"></td>
+                            <td><input type="text" class="form-control" value="4"></td>
+                            <td><input type="text" class="form-control" value="9"></td>
+                            <td><input type="text" class="form-control" value="10"></td>
+                            <td><input type="text" class="form-control" value="7"></td>
+                            <td><input type="text" class="form-control" value="2"></td>-->
+
+                            <td class="P1"></td>
+                            <td class="P2"></td>
+                            <td class="lambda"></td>
+
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+                    <button type="button" class="btn btn-primary" style="width: 90%;" id="drawGraph"> Построение графика Ганта </button>
+                    <button type="button" class="btn btn-primary" style="width: 90%; margin-top: 3%;" id="findDecision">Поиск оптимального порядка</button>
+                </div>
+              <div class="col-9">
+                <div class="row p-4" id = "cardChart1" style="display: none;">
+                    <div class="card mb-4 m-auto p-0 text-center" style = "width: 90%; height: 500px;">
+                        
+                        <div class="card-body" >
+                            <div id = "chart1" style="margin-left: 0; margin-right: 0; margin-bottom: 0; margin-top: auto; height: 480px; width: 800px;" ></div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div id = "cardChart2" style="display: none;">
+            <h2 class="text-center">
+                Оптимальный порядок
+            </h2>
+
+          <div id = "Johnson">
+            <h3>
+              Метод Джонсона
+            </h3>
+
+            <div class="row">
+                <div class="col-3">
+                    <div class="row p-4">
+                        <table class="table table-bordered" >
+                            <thead>
+                              <tr>
+                                <th scope="col" style="width: 10px;">№</th>
+                                <th scope="col" style="width: 10px;">№<sub>исх</sub></th>
+                                <th scope="col"> a<sub>i</sub></th>
+                                <th scope="col"> b<sub>i</sub></th>
+                                {% if type == 3 %}
+                                  <th scope="col">c<sub>i</sub></th>
+                                {% endif %}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope="row">1</th>
+                                <td class="res-cell1" text="abc">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell1"></td>
+                                {% endif %}
+                              </tr>
+                              <tr>
+                                <th scope="row">2</th>
+                                <td class="res-cell1">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell1"></td>
+                                {% endif %}
+                              </tr>
+                              <tr>
+                                <th scope="row">3</th>
+                                <td class="res-cell1">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell1"></td>
+                                {% endif %}
+                              </tr>
+                              <tr>
+                                <th scope="row">4</th>
+                                <td class="res-cell1">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell1"></td>
+                                {% endif %}
+                              </tr>
+                              <tr>
+                                <th scope="row">5</th>
+                                <td class="res-cell1">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                <td class="res-cell1">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell1"></td>
+                                {% endif %}
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+
+                    {% if type == 3 %}
+                      <a id="jtime">
+                        Время выполнения
+                      </a>
+                    {% endif %}
+                </div>
+                <div class="col-9">
+                  <div class="row p-4">
+                      <div class="card mb-4 m-auto p-0 text-center" style = "width: 90%; height: 500px;">
+                          <div class="card-body" >
+                              <div id = "chart2" style="margin-left: 0; margin-right: 0; margin-bottom: 0; margin-top: auto; height: 480px; width: 800px;" ></div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+
+          {% if type == 3 %}
+          <div>
+            <h3>
+              Метод полного перебора
+            </h3>
+
+            <div class="row">
+                <div class="col-3">
+                    <div class="row p-4">
+                        <table class="table table-bordered" >
+                            <thead>
+                              <tr>
+                                <th scope="col" style="width: 10px;">№</th>
+                                <th scope="col" style="width: 10px;">№<sub>исх</sub></th>
+                                <th scope="col"> a<sub>i</sub></th>
+                                <th scope="col"> b<sub>i</sub></th>
+                                {% if type == 3 %}
+                                  <th scope="col">c<sub>i</sub></th>
+                                {% endif %}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope="row">1</th>
+                                <td class="res-cell2" text="abc">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell2"></td>
+                                {% endif %}
+                              </tr>
+                              <tr>
+                                <th scope="row">2</th>
+                                <td class="res-cell2">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell2"></td>
+                                {% endif %}
+                              </tr>
+                              <tr>
+                                <th scope="row">3</th>
+                                <td class="res-cell2">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell2"></td>
+                                {% endif %}
+                              </tr>
+                              <tr>
+                                <th scope="row">4</th>
+                                <td class="res-cell2">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell2"></td>
+                                {% endif %}
+                              </tr>
+                              <tr>
+                                <th scope="row">5</th>
+                                <td class="res-cell2">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                <td class="res-cell2">Mark</td>
+                                {% if type == 3 %}
+                                  <td class="res-cell2"></td>
+                                {% endif %}
+                              </tr>
+                            </tbody>
+                          </table>
+                    </div>
+
+                    {% if type == 3 %}
+                      <a id="ptime">
+                        Время выполнения
+                      </a>
+                    {% endif %}
+                </div>
+                <div class="col-9">
+                  <div class="row p-4">
+                      <div class="card mb-4 m-auto p-0 text-center" style = "width: 90%; height: 500px;">
+                          <div class="card-body" >
+                              <div id = "chart3" style="margin-left: 0; margin-right: 0; margin-bottom: 0; margin-top: auto; height: 480px; width: 800px;" ></div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          {% endif %}
+        </div>
+        
+      </div>
+
+    
+
+    
+
+    <!-- plotly CDN -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script>
+        //var graph1 = {{ graph1JSON | safe}};
+        //Plotly.plot("chart1", graph1, {})
+        //Plotly.plot("chart2", graph1, {})
+    </script>
+{% endblock %}
