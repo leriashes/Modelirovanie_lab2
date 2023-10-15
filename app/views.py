@@ -461,7 +461,7 @@ def index():
                 dt = []
 
                 TableMethod(start_values, t, T, dt, [], [])
-                return jsonify({'t_str': (' ').join(t), 'T_str': (' ').join(T), 'dt_str': (' ').join(dt)})
+                return jsonify({'dt_str': (' ').join(dt), 'T': int(T[48])})
 
             #Поиск решения
             elif (request.args.get('action') == 'find'):
@@ -473,23 +473,39 @@ def index():
 
                 values = []
 
-                print(start_values)
-
                 i = 0
 
                 for seq in sequences:
-                    print('seq ', seq)
                     values.append([])
                     for elem in seq:
-                        print('elem', elem)
                         values[i].append(start_values[elem].copy())
                     i += 1
 
-                print(values)
 
-                for i in range(4):
+                TableMethod(values[0], t_res, T_res, dt_res, Tpr_res, Tozh_res)
+                T = int(T_res[48])
+                k = 0
+
+
+                for i in range(1, 4):
                     TableMethod(values[i], t_res, T_res, dt_res, Tpr_res, Tozh_res)
-                return jsonify({'seq_str': (' ').join(seq_str), 't_str': (' ').join(t_res), 'T_str': (' ').join(T_res), 'dt_str': (' ').join(dt_res), 'Tpr_str': (' ').join(Tpr_res), 'Tozh_str': (' ').join(Tozh_res)})
+
+                    if (int(T_res[48 + 49 * i]) < T):
+                        T = int(T_res[48 + 49 * i])
+                        k = i
+                    
+                dt_opt = []
+
+                for i in range(49):
+                    dt_opt.append(dt_res[i + 49 * k])
+
+                seq_opt = []
+
+                for i in range(7):
+                    seq_opt.append(str(sequences[k][i] + 1))
+                    
+
+                return jsonify({'num_opt': k, 'seq_opt': (' ').join(seq_opt), 'dt_opt': (' ').join(dt_opt), 'T': T, 'seq_str': (' ').join(seq_str), 't_str': (' ').join(t_res), 'T_str': (' ').join(T_res), 'dt_str': (' ').join(dt_res), 'Tpr_str': (' ').join(Tpr_res), 'Tozh_str': (' ').join(Tozh_res)})
 
                 
         return jsonify({'bad': (' ').join(bad_values)})

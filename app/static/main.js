@@ -224,7 +224,7 @@ $(document).ready(function(){
                         values.push(cells[i].value);
                     }
 
-                    draw_graph([1, 2, 3, 4, 5, 6, 7], values, response.dt_str.split(' '), (response.T_str.split(' '))[48], 1);
+                    draw_graph([1, 2, 3, 4, 5, 6, 7], values, response.dt_str.split(' '), response.T, 1);
 
                     let a = document.querySelector('#cardChart1');
                     a.style.display = 'block';
@@ -302,15 +302,26 @@ $(document).ready(function(){
                         }
                     }
 
+                    s = response.seq_opt.split(' ')
+                    sequence = []
+                    for (i = 0; i < 7; i++)
+                    {
+                        sequence.push(parseInt(s[i]))
+                    }
+
+
                     let cells = document.querySelectorAll('.form-control')
                     values = [];
                     
-                    for(i = 0; i < cells.length; i++)
+                    for(i = 0; i < 7; i++)
                     {
-                        values.push(cells[i].value);
+                        for (j = 0; j < 7; j++)
+                        {
+                            values.push(cells[(sequence[i] - 1) * 7 + j].value);
+                        }
                     }
 
-                    draw_graph([7, 4, 1, 3, 2, 5, 6], values, response.dt_str.split(' '), (response.T_str.split(' '))[48], 2);
+                    draw_graph(sequence, values, response.dt_opt.split(' '), response.T, 2);
 
                     /*if (response.cond == null || response.cond == true)
                     {
