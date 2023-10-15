@@ -183,16 +183,9 @@ function draw_graph(s, xs, ys, T, values, table_number)
 
 }
 
-
-
-
-
-
-$(document).ready(function(){
-
+function findSeq()
+{
     table_values = get_values();
-
-    let cells = document.querySelectorAll('.form-control');
 
     $.ajax({
         url: '',
@@ -207,39 +200,52 @@ $(document).ready(function(){
 
             if (!bad_values(response.bad))
             {
-                values = []
-                
-                for(i = 0; i < cells.length; i++)
-                {
-                    values.push(cells[i].value)
-                }
+                P1 = response.P1s.split(' ')
+                P2 = response.P2s.split(' ')
+                Lambda = response.lambdas.split(' ')
+                Seq = response.seq_str.split(' ')
 
                 let p1 = document.querySelectorAll('.P1');
+                let p2 = document.querySelectorAll('.P2');
+                let lambda = document.querySelectorAll('.lambda');
+                let seq = document.querySelectorAll('.seq');
+
+                for (i = 0; i < p1.length; i++)
+                {
+                    p1[i].innerHTML = P1[i];
+                    p2[i].innerHTML = P2[i];
+                    lambda[i].innerHTML = Lambda[i];
+                }
+
+                for (i = 0; i < seq.length; i++)
+                {
+                    seq[i].innerHTML = Seq[i];
+                }
+
+                /*let p1 = document.querySelectorAll('.P1');
 
                 for (i = 0; i < p1.length; i++)
                 {
                     p1[i].innerHTML = 5;
-                }
+                }*/
             }
         }
     });
+}
 
 
-    
+$(document).ready(function(){
 
-    let a = document.querySelector('#cardChart1');
-    a.style.display = 'block';
+    findSeq();
+
+    $('#findSeq').click(function(e)
+    {
+        findSeq();
+    });
 
     $('#drawGraph').click(function(e)
     {
-        let p1 = document.querySelectorAll('.P1');
-        let p2 = document.querySelectorAll('.P2');
-
-        for (i = 0; i < p1.length; i++)
-        {
-            p1[i].innerHTML = 7;
-            p2[i].innerHTML = 9;
-        }
+        ;
     });
 
     //График по исходным данным

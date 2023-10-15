@@ -145,6 +145,187 @@ def JohnsonAlgorithm(start_values):
 
     return result_values
 
+def SortAsc(params, seq, param_number):
+
+    seq = seq.copy()
+
+    n = len(seq)
+
+    for i in range(n - 1):
+        for j in range(n - i - 1):
+            if params[seq[j]][param_number] > params[seq[j + 1]][param_number]:
+                seq[j], seq[j + 1] = seq[j + 1], seq[j]
+    
+    return seq
+
+def SortDesc(params, seq, param_number):
+
+    seq = seq.copy()
+
+    n = len(seq)
+
+    for i in range(n - 1):
+        for j in range(n - i - 1):
+            if params[seq[j]][param_number] < params[seq[j + 1]][param_number]:
+                seq[j], seq[j + 1] = seq[j + 1], seq[j]
+    
+    return seq
+
+def Rule1(params, D10, D2):
+
+    #сортировка D10 в порядке возрастания P1
+    seq = SortAsc(params, D10, 1)
+
+    #сортировка D2 в порядке убывания P2
+    seq += SortDesc(params, D2, 2)
+
+    return seq
+
+
+def Rule2(params):
+
+    D = params.copy()
+
+    n = len(D)
+
+    #сортировка D в порядке убывания лямбда
+    for i in range(n - 1):
+        for j in range(n - i - 1):
+            if D[j][3] < D[j + 1][3]:
+                D[j], D[j + 1] = D[j + 1], D[j]
+
+    seq = []
+
+    for i in range(n):
+        seq.append(D[i][0])
+        
+    return seq
+
+def Rule3(params, D1, D0, D2):
+
+    #сортировка D1 в порядке возрастания P1
+    seq = SortAsc(params, D1, 1)
+
+    #сортировка D0 в порядке возрастания P1
+    seq += SortAsc(params, D0, 1)
+
+    #сортировка D2 в порядке убывания P2
+    seq += SortDesc(params, D2, 2)
+
+    return seq
+
+def Pairs(params, d):
+    seq = []
+
+    n = len(d) // 2
+
+    for i in range(n):
+        m = params[d[0]][2]
+        k = 0
+
+        for j in range(len(d)):
+            if params[d[j]][2] > m:
+                m = params[d[j]][2]
+                k = j
+        
+        seq.append(d[k])
+        d.pop(k)
+
+        m = params[d[0]][1]
+        k = 0
+
+        for j in range(len(d)):
+            if params[d[j]][1] < m:
+                m = params[d[j]][1]
+                k = j
+
+        seq.append(d[k])
+        d.pop(k)
+
+    return seq
+
+def Dx(params, seq, dx):
+
+    n = len(seq)
+    lx = params[dx][3]
+
+    placed = False
+
+    for i in range(0, n - 2, 2):
+        m1 = max(params[seq[i]][3], params[seq[i + 1]][3])
+        m2 = min(params[seq[i + 2]][3], params[seq[i + 3]][3])
+
+        if (m1 >= lx >= m2):
+            placed = True
+            seq.insert(i + 2, dx)
+            break
+
+    if not placed and lx >= min(params[seq[0]][3], params[seq[1]][3]):
+        placed = True
+        seq.insert(0, dx)
+
+    if not placed and lx <= max(params[seq[n - 2]][3], params[seq[n - 1]][3]):
+        placed = True
+        seq.append(dx)
+        
+    return seq
+
+def Rule4(params, D1, D0, D2):
+    d1 = D1.copy()
+    d0 = D0.copy()
+    d2 = D2.copy()
+
+    seq = Pairs(params, d1)
+
+    if (len(d1) != 0):
+        if (len(d0) == 0 and len(d2) == 0):
+            Dx(params, seq, d1[0])
+        else:
+            seq.append(d1[0])
+
+            if (len(d0) != 0):
+                dn = d0
+            else:
+                dn = d2
+            
+            m = params[dn[0]][1]
+            k = 0
+
+            for j in range(len(dn)):
+                if params[dn[j]][1] < m:
+                    m = params[dn[j]][1]
+                    k = j
+
+            seq.append(dn[k])
+            dn.pop(k)
+
+    
+    seq += Pairs(params, d0)
+
+    if (len(d0) != 0):
+        if (len(d2) == 0):
+            Dx(params, seq, d0[0])
+        else:
+            seq.append(d0[0])
+
+            m = params[d2[0]][1]
+            k = 0
+
+            for j in range(len(d2)):
+                if params[d2[j]][1] < m:
+                    m = params[d2[j]][1]
+                    k = j
+
+            seq.append(d2[k])
+            d2.pop(k)
+
+    seq += Pairs(params, d2)
+
+    if (len(d2) != 0):
+        Dx(params, seq, d2[0])
+
+    return seq
+
 
 @app.route('/')
 @app.route('/index')
@@ -157,8 +338,6 @@ def index():
         start_values = []
 
         if (len(bad_values) == 0):
-            print(cells_values)
-
             for i in range(0, len(cells_values), 7):
                 v = [i]
                 for j in range(7):
@@ -172,6 +351,8 @@ def index():
                 P2 = []
                 lamb = []
 
+                params = []
+
                 for i in range(7):
                     sum1 = 0
                     sum2 = 0
@@ -184,7 +365,32 @@ def index():
                     P2.append(str(sum2))
                     lamb.append(str(sum2 - sum1))
 
-                return jsonify({'P1s': (' ').join(P1), 'P2s': (' ').join(P2), 'lambdas': (' ').join(lamb),})
+                    params.append([i, sum1, sum2, sum2 - sum1])
+
+                D1 = []
+                D0 = []
+                D10 = []
+                D2 = []
+
+                for i in range(7):
+                    if params[i][3] >= 0:
+                        if params[i][3] > 0:
+                            D1.append(params[i][0])
+                        else:
+                            D0.append(params[i][0])
+                        D10.append(params[i][0])
+                    else:
+                        D2.append(params[i][0])
+
+                sequences = [Rule1(params, D10, D2), Rule2(params), Rule3(params, D1, D0, D2), Rule4(params, D1, D0, D2)]
+
+                seq_str = []
+
+                for i in range(7):
+                    for j in range(4):
+                        seq_str.append(str(sequences[j][i] + 1))
+
+                return jsonify({'P1s': (' ').join(P1), 'P2s': (' ').join(P2), 'lambdas': (' ').join(lamb), 'seq_str': (' ').join(seq_str)})
 
                 #T, mas_x, y = countTStart(len(cells_values), 2, start_values)
 
