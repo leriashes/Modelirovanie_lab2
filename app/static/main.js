@@ -126,6 +126,7 @@ function draw_graph(s, values, dt, Tres, table_number)
 
     t = parseInt(Tres / 45) + 1
     
+
     var layout = {
     title: 'График Ганта',
     barmode: 'stack',
@@ -137,6 +138,19 @@ function draw_graph(s, values, dt, Tres, table_number)
         dtick: t,
         showline: true
     },
+    annotations: [
+        {
+          x: Tres,
+          y: 0,
+          xref: 'x',
+          yref: 'y',
+          text: 'T = ' + Tres,
+          showarrow: true,
+          arrowhead: 3,
+          ax: 20,
+          ay: -40
+        },
+      ]
     };
     
     Plotly.newPlot("chart" + table_number.toString(), data, layout);
@@ -258,6 +272,8 @@ $(document).ready(function(){
                 {
                     Seq = response.seq_str.split(' ');
                     let seq = document.querySelectorAll('.new_seq');
+                    let num_opt = document.querySelector('#seq_num');
+                    num_opt.innerHTML = "Оптимальная последовательность: " + (response.num_opt + 1);
 
                     for (i = 0, j = 0; i < seq.length; i++, j += 4)
                     {
@@ -411,164 +427,5 @@ $(document).ready(function(){
         })
     });
 
-
-
-
-
-    //График по исходным данным
-    /*$('#drawGraph').click(function(e)
-    {
-        e.preventDefault();
-
-        table_values = get_values();
-
-        let cells = document.querySelectorAll('.form-control')
-
-        $.ajax({
-            url: '',
-            type: 'get',
-            contentType: 'application/json',
-            data: {
-                action: 'draw',
-                cells_values: JSON.stringify(table_values),
-            },
-
-            success: function(response){
-
-                if (!bad_values(response.bad))
-                {
-                    values = []
-                    
-                    for(i = 0; i < cells.length; i++)
-                    {
-                        values.push(cells[i].value)
-                    }
-
-                    if (response.mas_y == null)
-                    {
-                        draw_graph([1, 2, 3, 4, 5], response.mas_x.split(' '), null, response.T, values, 1);
-                    }
-                    else
-                    {
-                        draw_graph([1, 2, 3, 4, 5], response.mas_x.split(' '), response.mas_y.split(' '), response.T, values, 1);
-                    }
-
-                    let a = document.querySelector('#cardChart1');
-                    a.style.display = 'block';
-                }
-
-
-            }
-            
-        })
-    })
-
-
-    //Поиск решения, график(и) по оптимальному решению
-    $('#findDecision').click(function(e)
-    {
-        e.preventDefault();
-        
-        table_values = get_values();
-        
-        $.ajax({
-            url: '',
-            type: 'get',
-            contentType: 'application/json',
-            data: {
-                action: 'find',
-                cells_values: JSON.stringify(table_values)
-            },
-            success: function(response){
-                
-                if (!bad_values(response.bad))
-                {
-                    if (response.cond == null || response.cond == true)
-                    {
-                        let cells = document.querySelectorAll('.res-cell1');
-                        var res = response.res.split(' ');
-                        let s = [];
-
-                        let n = res.length / 5;
-                        values = []
-
-                        for(i = 0; i < cells.length; i++)
-                        {
-                            if (i % n == 0)
-                            {
-                                s.push(parseInt(res[i]));
-                            }
-                            else
-                            {
-                                values.push(res[i])
-                            }
-
-                            cells[i].innerHTML = res[i];
-                        }
-
-
-                        if (response.mas_y == null)
-                        {
-                            draw_graph(s, response.mas_x.split(' '), null, response.T, values, 2);
-                        }
-                        else
-                        {
-                            let b = document.querySelector('#Johnson');
-                            b.style.display = 'block';
-
-                            draw_graph(s, response.mas_x.split(' '), response.mas_y.split(' '), response.T, values, 2);
-
-                            if (response.jtime != null)
-                            {
-                                let j = document.querySelector('#jtime');
-                                let p = document.querySelector('#ptime');
-                                p.style.display = 'block';
-
-                                j.innerHTML = "Время выполнения\n" + response.jtime;
-                                p.innerHTML = "Время выполнения\n" + response.ptime;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        let b = document.querySelector('#Johnson');
-                        b.style.display = 'none';
-
-                        let p = document.querySelector('#ptime');
-                        p.style.display = 'none';
-                    }
-
-                    if (response.cond != null)
-                    {
-                        let cells = document.querySelectorAll('.res-cell2');
-                        var res = response.pres.split(' ');
-                        let s = [];
-
-                        let n = res.length / 5;
-                        values = []
-
-                        for(i = 0; i < cells.length; i++)
-                        {
-                            if (i % n == 0)
-                            {
-                                s.push(parseInt(res[i]));
-                            }
-                            else
-                            {
-                                values.push(res[i])
-                            }
-
-                            cells[i].innerHTML = res[i];
-                        }
-
-                        draw_graph(s, response.pmas_x.split(' '), response.pmas_y.split(' '), response.pT, values, 3);
-                    }
-
-                    let a = document.querySelector('#cardChart2');
-                    a.style.display = 'block';
-                }
-            }
-        })
-    })*/
-}
+   }
 )

@@ -37,103 +37,6 @@ def findBad(cells_values):
 
     return bad_values
 
-
-def countTStart(n, start_values):
-    sum_t = [0, 0, 0, 0, 0, 0, 0]
-    sum_dt = [0, 0, 0, 0, 0, 0]
-    T = 0
-
-    dt_str = []
-    dt = []
-
-    '''for i in range(0, n, 7):
-        dt.append([])
-        for j in range(7):
-            sum_t[j] += start_values[i // 7][j + 1]
-            dt[i].append(max(sum_a - sum_x - sum_b, 0))
-        xs.append(max(sum_a - sum_x - sum_b, 0))
-        sum_x += xs[i // step]
-        sum_b += start_values[i // step][2]
-        if (three):
-            ys.append(max(sum_x + sum_b - sum_y - sum_c, 0))
-            sum_y += ys[i // step]
-            sum_c += start_values[i // step][3]
-
-    for i in range(len(xs)):
-        mas_x.append(str(xs[i]))
-        if (three):
-            mas_y.append(str(ys[i]))
-
-        
-    if (three):
-        T = sum_y + sum_c
-    else:
-        T = sum_x + sum_b
-
-    return (T, mas_dt)'''
-
-
-def countT(n, values, type):
-    return (countTStart(n, type + 2, values))
-
-def countTseq(values, seq):
-    sum_a = 0
-    sum_b = 0
-    sum_c = 0
-    sum_x = 0
-    sum_y = 0
-
-    mas_x = []
-    mas_y = []
-
-    xs = []
-    ys = []
-    for i in range(len(seq)):
-        sum_a += values[seq[i]][1]
-        xs.append(max(sum_a - sum_x - sum_b, 0))
-        sum_x += xs[i]
-        sum_b += values[seq[i]][2]
-        ys.append(max(sum_x + sum_b - sum_y - sum_c, 0))
-        sum_y += ys[i]
-        sum_c += values[seq[i]][3]
-
-    for i in range(len(xs)):
-        mas_x.append(str(xs[i]))
-        mas_y.append(str(ys[i]))
-
-    T = sum_y + sum_c
-
-    return (T, mas_x, mas_y)
-
-
-def JohnsonAlgorithm(start_values):
-    mas_a = []
-    mas_b = []
-
-    k = len(start_values)
-    for i in range(k):
-        m = start_values[0][1]
-        row = 0
-        ind = 0
-        for j in range(len(start_values)):
-            for t in range(2):
-                if (start_values[j][t + 1] < m):
-                    m = start_values[j][t + 1]
-                    row = j
-                    ind = t
-        
-        if (ind == 0):
-            mas_a.append(start_values[row])
-        else:
-            mas_b.append(start_values[row])
-
-        start_values.pop(row)
-
-    mas_b.reverse()
-    result_values = mas_a + mas_b
-
-    return result_values
-
 def TableMethod(values, t_str, T_str, dt_str, Tpr_str, Tozh_str):
     t = []
     T = []
@@ -388,6 +291,8 @@ def Rule4(params, D1, D0, D2):
 
     return seq
 
+
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -504,6 +409,7 @@ def index():
                 for i in range(7):
                     seq_opt.append(str(sequences[k][i] + 1))
                     
+                
 
                 return jsonify({'num_opt': k, 'seq_opt': (' ').join(seq_opt), 'dt_opt': (' ').join(dt_opt), 'T': T, 'seq_str': (' ').join(seq_str), 't_str': (' ').join(t_res), 'T_str': (' ').join(T_res), 'dt_str': (' ').join(dt_res), 'Tpr_str': (' ').join(Tpr_res), 'Tozh_str': (' ').join(Tozh_res)})
 
