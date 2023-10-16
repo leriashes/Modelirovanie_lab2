@@ -389,7 +389,7 @@ def index():
 
                 TableMethod(values[0], t_res, T_res, dt_res, Tpr_res, Tozh_res)
                 T = int(T_res[48])
-                k = 0
+                k_opt = 0
 
 
                 for i in range(1, 4):
@@ -397,21 +397,130 @@ def index():
 
                     if (int(T_res[48 + 49 * i]) < T):
                         T = int(T_res[48 + 49 * i])
-                        k = i
+                        k_opt = i
                     
                 dt_opt = []
 
                 for i in range(49):
-                    dt_opt.append(dt_res[i + 49 * k])
+                    dt_opt.append(dt_res[i + 49 * k_opt])
 
                 seq_opt = []
 
                 for i in range(7):
-                    seq_opt.append(str(sequences[k][i] + 1))
+                    seq_opt.append(str(sequences[k_opt][i] + 1))
                     
                 
 
-                return jsonify({'num_opt': k, 'seq_opt': (' ').join(seq_opt), 'dt_opt': (' ').join(dt_opt), 'T': T, 'seq_str': (' ').join(seq_str), 't_str': (' ').join(t_res), 'T_str': (' ').join(T_res), 'dt_str': (' ').join(dt_res), 'Tpr_str': (' ').join(Tpr_res), 'Tozh_str': (' ').join(Tozh_res)})
+                # метод перебора
+                t_ps = []
+                T_ps = []
+                dt_ps = []
+
+                Tpr_ps = []
+                Tozh_ps = []
+
+                values = []
+                ps = [0, 1, 2, 3, 4, 5, 6]
+                prs = ps.copy()
+
+                TableMethod(start_values, t_ps, T_ps, dt_ps, Tpr_ps, Tozh_ps)
+
+                t_prs = t_ps.copy()
+                T_prs = T_ps.copy()
+                dt_prs = dt_ps.copy()
+
+                Tpr_prs = Tpr_ps.copy()
+                Tozh_prs = Tozh_ps.copy()
+
+                pT = int(T_prs[48])
+
+                n = len(ps)
+
+                while True:
+                    i = n - 2
+                    while i != -1 and ps[i] >= ps[i + 1]:
+                        i -= 1
+                    if i == -1:
+                        break
+                    
+                    k = n - 1
+                    while ps[i] >= ps[k]:
+                        k -= 1
+
+                    ps[i], ps[k] = ps[k], ps[i]
+
+                    l = i + 1
+                    r = n - 1
+
+                    while l < r:
+                        ps[l], ps[r] = ps[r], ps[l]
+                        l += 1
+                        r -= 1
+
+                    values = []
+
+                    for i in range(7):
+                        values.append(start_values[ps[i]].copy())
+
+                    t_ps = []
+                    T_ps = []
+                    dt_ps = []
+
+                    Tpr_ps = []
+                    Tozh_ps = []
+
+                    TableMethod(values, t_ps, T_ps, dt_ps, Tpr_ps, Tozh_ps)
+
+
+                    Tps = int(T_ps[48])
+
+                    if (Tps == 0):
+                        T_up = 0
+                        T_left = 0
+
+                        for k in range(6, -1, -1):
+                            if (int(T_ps[k * 7 + 6]) != 0):
+                                T_up = int(T_ps[k * 7 + 6])
+                                break
+
+                        for k in range(6, -1, -1):
+                            if (int(T_ps[42 + k]) != 0):
+                                T_left = int(T_ps[42 + k])
+                                break
+
+                        Tps = max(T_up, T_left)
+
+                    if (Tps < pT):
+                        prs = ps.copy()
+                        t_prs = t_ps.copy()
+                        T_prs = T_ps.copy()
+                        dt_prs = dt_ps.copy()
+
+                        Tpr_prs = Tpr_ps.copy()
+                        Tozh_prs = Tozh_ps.copy()
+
+                        pT = Tps
+
+                    
+
+                seq_prs = []
+
+                for i in range(7):
+                    seq_prs.append(str(prs[i] + 1))
+                    seq_str.insert(i * 5 + 4, str(prs[i] + 1))
+                    
+                for i in range(49):
+                    t_res.append(str(t_prs[i]))
+                    T_res.append(str(T_prs[i]))
+                
+
+                for i in range(8):
+                    Tpr_res.append(str(Tpr_prs[i]))
+                    Tozh_res.append(str(Tozh_prs[i]))
+
+
+
+                return jsonify({'num_opt': k_opt, 'seq_prs': (' ').join(seq_prs), 'dt_prs': (' ').join(dt_prs), 'Tprs': pT, 'seq_opt': (' ').join(seq_opt), 'dt_opt': (' ').join(dt_opt), 'T': T, 'seq_str': (' ').join(seq_str), 't_str': (' ').join(t_res), 'T_str': (' ').join(T_res), 'Tpr_str': (' ').join(Tpr_res), 'Tozh_str': (' ').join(Tozh_res)})
 
                 
         return jsonify({'bad': (' ').join(bad_values)})

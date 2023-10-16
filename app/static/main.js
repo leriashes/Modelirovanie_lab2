@@ -275,13 +275,13 @@ $(document).ready(function(){
                     let num_opt = document.querySelector('#seq_num');
                     num_opt.innerHTML = "Оптимальная последовательность: " + (response.num_opt + 1);
 
-                    for (i = 0, j = 0; i < seq.length; i++, j += 4)
+                    for (i = 0, j = 0; i < seq.length; i++, j += 5)
                     {
                         seq[i].innerHTML = Seq[(i - i % 7) / 7 + j];
 
-                        if (j == 24)
+                        if (j == 30)
                         {
-                            j = -4;
+                            j = -5;
                         }
                     }
 
@@ -303,7 +303,7 @@ $(document).ready(function(){
                     let val_Tj = document.querySelectorAll('.Tj');
                     let val_Tij = document.querySelectorAll('.Tij');
 
-                    for (i = 0, j = 0, k = 0; k < 32; k++)
+                    for (i = 0, j = 0, k = 0; k < 40; k++)
                     {
                         if (k % 8 == 7)
                         {
@@ -339,87 +339,25 @@ $(document).ready(function(){
 
                     draw_graph(sequence, values, response.dt_opt.split(' '), response.T, 2);
 
-                    /*if (response.cond == null || response.cond == true)
+                    s = response.seq_prs.split(' ')
+                    sequence = []
+                    for (i = 0; i < 7; i++)
                     {
-                        let cells = document.querySelectorAll('.res-cell1');
-                        var res = response.res.split(' ');
-                        let s = [];
-
-                        let n = res.length / 5;
-                        values = []
-
-                        for(i = 0; i < cells.length; i++)
-                        {
-                            if (i % n == 0)
-                            {
-                                s.push(parseInt(res[i]));
-                            }
-                            else
-                            {
-                                values.push(res[i])
-                            }
-
-                            cells[i].innerHTML = res[i];
-                        }
-
-
-                        if (response.mas_y == null)
-                        {
-                            draw_graph(s, response.mas_x.split(' '), null, response.T, values, 2);
-                        }
-                        else
-                        {
-                            let b = document.querySelector('#Johnson');
-                            b.style.display = 'block';
-
-                            draw_graph(s, response.mas_x.split(' '), response.mas_y.split(' '), response.T, values, 2);
-
-                            if (response.jtime != null)
-                            {
-                                let j = document.querySelector('#jtime');
-                                let p = document.querySelector('#ptime');
-                                p.style.display = 'block';
-
-                                j.innerHTML = "Время выполнения\n" + response.jtime;
-                                p.innerHTML = "Время выполнения\n" + response.ptime;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        let b = document.querySelector('#Johnson');
-                        b.style.display = 'none';
-
-                        let p = document.querySelector('#ptime');
-                        p.style.display = 'none';
+                        sequence.push(parseInt(s[i]))
                     }
 
-                    if (response.cond != null)
+                    values = [];
+                    
+                    for(i = 0; i < 7; i++)
                     {
-                        let cells = document.querySelectorAll('.res-cell2');
-                        var res = response.pres.split(' ');
-                        let s = [];
-
-                        let n = res.length / 5;
-                        values = []
-
-                        for(i = 0; i < cells.length; i++)
+                        for (j = 0; j < 7; j++)
                         {
-                            if (i % n == 0)
-                            {
-                                s.push(parseInt(res[i]));
-                            }
-                            else
-                            {
-                                values.push(res[i])
-                            }
-
-                            cells[i].innerHTML = res[i];
+                            values.push(cells[(sequence[i] - 1) * 7 + j].value);
                         }
-
-                        draw_graph(s, response.pmas_x.split(' '), response.pmas_y.split(' '), response.pT, values, 3);
                     }
-*/
+
+                    draw_graph(sequence, values, response.dt_prs.split(' '), response.Tprs, 3);
+                    
                     let a = document.querySelector('#cardChart2');
                     a.style.display = 'block';
                 }
